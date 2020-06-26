@@ -17,7 +17,7 @@ link () {
 	read resp
 	# TODO - regex here?
 	if [ "$resp" = 'y' -o "$resp" = 'Y' ] ; then
-		for file in $( ls -A | grep -vE '\.exclude*|\.git$|\.gitignore|.*.md|.*.swp|.*.sh' ) ; do
+		for file in $( ls -A | grep -vE '\.exclude*|\.git$|\.gitignore|\.gitmodules|.*.md|.*.swp|.*.sh' ) ; do
 			ln -sv "$PWD/$file" "$HOME"
 		done
 		# TODO: source files here?
