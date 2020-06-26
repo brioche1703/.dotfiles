@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/brioche/.oh-my-zsh"
+export ZSH="./.dotfiles/aux.exclude/oh-my-zsh"
 
 # THEME
 ZSH_THEME="agnoster"
