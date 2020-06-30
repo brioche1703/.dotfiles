@@ -1,8 +1,8 @@
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="./.dotfiles/aux.exclude/oh-my-zsh"
+export ZSH="/home/$USERNAME/.dotfiles/aux.exclude/oh-my-zsh"
 
 # THEME
 ZSH_THEME="agnoster"
