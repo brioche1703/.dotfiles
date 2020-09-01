@@ -1,3 +1,6 @@
 [submodule "aux.exclude/oh-my-zsh"]
 	path = aux.exclude/oh-my-zsh
 	url = https://github.com/ohmyzsh/ohmyzsh
+[submodule "ohmyzsh"]
+	path = ohmyzsh
+	url = https://github.com/ohmyzsh/ohmyzsh.git
