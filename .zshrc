@@ -68,7 +68,10 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git
+         zshmarks 
+         git-prompt)
+
 
 source $ZSH/oh-my-zsh.sh
 
@@ -101,8 +104,6 @@ source $ZSH/oh-my-zsh.sh
 # Make non case sensitive
 HYPHEN_INSENSITIVE="true"
 
-plugins=(git zshmarks)
-
 # Enable Vim control in shell
 bindkey -v
 # Remap ESC key to "kj"
@@ -131,8 +132,3 @@ alias s="bookmark"
 alias d="deletemark"
 alias p="showmarks"
 alias l="showmarks"
-
-#Git prompt
-plugins=(
-  git-prompt
-)
