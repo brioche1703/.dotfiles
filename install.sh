@@ -1,0 +1,11 @@
+BASEDIR=$(pwd)
+ln -svf $BASEDIR/.vimrc ~ 
+ln -svf $BASEDIR/.zshrc ~ 
+ln -svf $BASEDIR/.tmux.conf ~ 
+
+#Install Vim-Plug
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+#Install Oh My ZSH
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"

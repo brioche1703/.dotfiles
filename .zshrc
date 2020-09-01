@@ -34,3 +34,11 @@ alias s="bookmark"
 alias d="deletemark"
 alias p="showmarks"
 alias l="showmarks"
+
+# Theme
+ZSH_THEME="robbyrussell"
+
+#Git prompt
+plugins=(
+  git-prompt
+)
