@@ -1,3 +1,5 @@
+git submodule update --init
+
 BASEDIR=$(pwd)
 ln -svf $BASEDIR/.vimrc ~ 
 ln -svf $BASEDIR/.zshrc ~ 
@@ -9,5 +11,5 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 
 #Install OhMyZsh
 export ZSH="$HOME/.dotfiles/zsh/ohmyzsh"
-
 source "$HOME/.zshrc"
+
