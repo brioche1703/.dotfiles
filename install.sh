@@ -6,3 +6,8 @@ ln -svf $BASEDIR/.tmux.conf ~
 #Install Vim-Plug
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+#Install OhMyZsh
+export ZSH="$HOME/.dotfiles/zsh/ohmyzsh"
+
+source "$HOME/.zshrc"

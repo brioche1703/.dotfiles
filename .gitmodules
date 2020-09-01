@@ -3,4 +3,4 @@
 	url = https://github.com/ohmyzsh/ohmyzsh
 [submodule "ohmyzsh"]
 	path = ohmyzsh
-	url = https://github.com/ohmyzsh/ohmyzsh.git
+	url = https://github.com/brioche1703/ohmyzsh.git
