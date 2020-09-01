@@ -1,4 +1,4 @@
-"" CONFIGURATION / KEVIN "
+"m CONFIGURATION / KEVIN "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Pluging 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -13,10 +13,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'mhinz/vim-startify' 				"open last used buffer
 Plug 'vim-airline/vim-airline'			" Airline status bar
 Plug 'vim-airline/vim-airline-themes'
-
-" FOCUS "
-Plug 'junegunn/goyo.vim'
-Plug 'junegunn/limelight.vim'
 
 " NerdTree "
 Plug 'preservim/nerdtree'
@@ -33,7 +29,8 @@ Plug 'easymotion/vim-easymotion'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Theme "
-Plug 'artanikin/vim-synthwave84'
+Plug 'dracula/vim',{'as':'dracula'}
+Plug 'octol/vim-cpp-enhanced-highlight'
 
 call plug#end()
 
@@ -49,8 +46,10 @@ set number relativenumber
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
+set scrolloff=10
 set expandtab
 set wildmode=longest,list,full
+set updatetime=300
 filetype plugin on
 syntax on
 
@@ -65,22 +64,10 @@ map <leader><leader> <Esc>/<++><CR>"_c4l
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Theme 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
-if (has("termguicolors"))
-  set termguicolors
-endif
-"set background=dark
-"set t_Co=256
-if &term =~ '256color'
-  " disable Background Color Erase (BCE) so that color schemes
-  " render properly when inside 256-color tmux and GNU screen.
-  " see also http://snk.tuxfamily.org/log/vim-256color-bce.html
-  set t_ut=
-endif
-
-colorscheme synthwave84
-
+colorscheme dracula
+set termguicolors
 " Make vim background transparent
-hi Normal guibg=NONE ctermbg=NONE
+" hi Normal guibg=NONE ctermbg=NONE
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -118,45 +105,6 @@ map <C-g> <Esc><Esc>:BCommits!<CR>
 let g:airline_powerline_fonts = 1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
-" => LimeLight
-""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Color name (:help cterm-colors) or ANSI code
-let g:limelight_conceal_ctermfg = 'gray'
-let g:limelight_conceal_ctermfg = 240
-
-" Color name (:help gui-colors) or RGB color
-let g:limelight_conceal_guifg = 'DarkGray'
-let g:limelight_conceal_guifg = '#777777'
-
-" Default: 0.5
-let g:limelight_default_coefficient = 0.7
-
-" Number of preceding/following paragraphs to include (default: 0)
-let g:limelight_paragraph_span = 1
-
-" Beginning/end of paragraph
-"   When there's no empty line between the paragraphs
-"   and each paragraph starts with indentation
-let g:limelight_bop = '^\s'
-let g:limelight_eop = '\ze\n^\s'
-
-" Highlighting priority (default: 10)
-"   Set it to -1 not to overrule hlsearch
-let g:limelight_priority = -1
-
-autocmd! User GoyoEnter Limelight
-autocmd! User GoyoLeave Limelight!
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Goyo
-""""""""""""""""""""""""""""""""""""""""""""""""""""""
-map <leader>f :Goyo \| set bg=light \| set linebreak<CR>
-
-autocmd BufRead,BufNewFile /tmp/neomutt* let g:goyo_width=80
-autocmd BufRead,BufNewFile /tmp/neomutt* :Goyo \| set bg=light
-autocmd BufRead,BufNewFile /tmp/neomutt* map ZZ :Goyo\|x!<CR>
-autocmd BufRead,BufNewFile /tmp/neomutt* map ZQ :Goyo\|q!<CR>
-""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => NerdTree 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 map <C-n> :NERDTreeToggle<CR>
@@ -193,3 +141,80 @@ inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
+" Press Tab and Shift+Tab and navigate around completion selections
+function! s:check_back_space() abort
+  let col = col('.') -1
+  return !col || getline('.')[col - 1] =~ '\s'
+endfunction
+
+inoremap <silent><expr> <Tab>
+  \ pumvisible() ? "\<C-n>" :
+  \ <SID>check_back_space() ? "\<Tab>" :
+  \ coc#refresh()
+inoremap <silent><expr> <S-Tab>
+  \ pumvisible() ? "\<C-p>" :
+  \ <SID>check_back_space() ? "\<S-Tab>" :
+  \ coc#refresh()
+
+" Press Enter to select completion items or expand snippets
+inoremap <silent><expr> <CR>
+  \ pumvisible() ? "\<C-y>" :
+  \ "\<C-g>u\<CR>"
+
+let g:coc_snippet_next = '<Tab>'              " Use Tab to jump to next snippet placeholder
+let g:coc_snippet_prev = '<S-Tab>'            " Use Shift+Tab to jump to previous snippet placeholder
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Remap keys for applying codeAction to the current buffer.
+" nmap <leader>ac  <Plug>(coc-codeaction)
+
+" Show all diagnostics.
+nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions.
+" nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+" Show commands.
+" nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document.
+nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols.
+nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+" nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+" nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list.
+" nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Makefile
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap <F5> :w <CR> :!make && ./a.out <CR>
