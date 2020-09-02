@@ -217,3 +217,7 @@ nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap <F5> :w <CR> :!make && ./a.out <CR>
+
+let g:clang_complete_macros = 1
+let g:clang_user_options = ' -DCLANG_COMPLETE_ONLY'
+
