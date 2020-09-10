@@ -81,6 +81,9 @@ let mapleader = "\<Space>"
 " CTRL-C for comment
 map <C-c> gcc
 
+" Replace word without deleting buffer
+map <C-p> cw<C-r>0<ESC>
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 " =>  Files , backups, and undo
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
