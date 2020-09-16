@@ -1,4 +1,4 @@
-"m CONFIGURATION / KEVIN "
+" CONFIGURATION / KEVIN "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Pluging 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -32,6 +32,10 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'dracula/vim',{'as':'dracula'}
 Plug 'octol/vim-cpp-enhanced-highlight'
 
+" Unity "
+Plug 'OmniSharp/omnisharp-vim'
+Plug 'dense-analysis/ale'
+
 call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -39,6 +43,8 @@ call plug#end()
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 set nocompatible
 set hidden
+set cmdheight=2
+set cmdheight=2
 set encoding=utf-8
 set autoindent
 set nospell
@@ -224,3 +230,18 @@ nnoremap <F5> :w <CR> :!make && ./a.out <CR>
 let g:clang_complete_macros = 1
 let g:clang_user_options = ' -DCLANG_COMPLETE_ONLY'
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Unity
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" OmniSharp """""""""
+" Use the stdio version of OmniSharp-roslyn - this is the default
+let g:OmniSharp_server_use_mono = 1
+
+" ALE """""""""""""""
+let g:ale_linters = {
+\ 'cs': ['OmniSharp'],
+\ 'cpp': ['clangd']
+\}
+
+let g:OmniSharp_selector_ui = 'coc'
