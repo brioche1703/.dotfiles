@@ -50,6 +50,8 @@ set scrolloff=10
 set expandtab
 set wildmode=longest,list,full
 set updatetime=300
+set ignorecase
+set hlsearch
 filetype plugin on
 syntax on
 
@@ -224,3 +226,4 @@ nnoremap <F5> :w <CR> :!make && ./a.out <CR>
 let g:clang_complete_macros = 1
 let g:clang_user_options = ' -DCLANG_COMPLETE_ONLY'
 
+let &path.="~/dev/graphics/lib/stb"
