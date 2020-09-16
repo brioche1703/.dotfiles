@@ -36,6 +36,9 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'OmniSharp/omnisharp-vim'
 Plug 'dense-analysis/ale'
 
+" Snippets "
+Plug 'SirVer/ultisnips'
+
 call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -240,6 +243,14 @@ let g:clang_user_options = ' -DCLANG_COMPLETE_ONLY'
 " Use the stdio version of OmniSharp-roslyn - this is the default
 let g:OmniSharp_server_use_mono = 1
 
+let g:OmniSharp_popup_options = {
+\ 'highlight': 'Normal',
+\ 'padding': [1],
+\ 'border': [1]
+\}
+
+let g:OmniSharp_want_snippet=1
+
 " ALE """""""""""""""
 let g:ale_linters = {
 \ 'cs': ['OmniSharp'],
@@ -247,3 +258,8 @@ let g:ale_linters = {
 \}
 
 let g:OmniSharp_selector_ui = 'coc'
+
+" UltiSnips """"""""
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
