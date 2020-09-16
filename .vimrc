@@ -56,6 +56,8 @@ set scrolloff=10
 set expandtab
 set wildmode=longest,list,full
 set updatetime=300
+set ignorecase
+set hlsearch
 filetype plugin on
 syntax on
 
