@@ -63,7 +63,6 @@ set ignorecase
 set hlsearch
 set colorcolumn=81
 set textwidth=80
-let &colorcolumn=join(range(81,999),",")
 highlight ColorColumn ctermbg=235 guibg=#2c2d27
 
 filetype plugin on
