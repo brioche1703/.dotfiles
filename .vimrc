@@ -61,6 +61,11 @@ set wildmode=longest,list,full
 set updatetime=300
 set ignorecase
 set hlsearch
+set colorcolumn=81
+set textwidth=80
+let &colorcolumn=join(range(81,999),",")
+highlight ColorColumn ctermbg=235 guibg=#2c2d27
+
 filetype plugin on
 syntax on
 
@@ -95,6 +100,9 @@ map <C-c> gcc
 " Replace word without deleting buffer
 map <C-p> cw<C-r>0<ESC>
 
+" Make TAB go to the matching pair
+nnoremap <Tab> %
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 " =>  Files , backups, and undo
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -109,6 +117,28 @@ set laststatus=2 "show status line all the time
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 " => FZF 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
+let $FZF_DEFAULT_OPTS='--reverse'
+
+let g:fzf_branch_actions = {
+      \ 'rebase': {
+      \   'prompt': 'Rebase> ',
+      \   'execute': 'echo system("{git} rebase {branch}")',
+      \   'multiple': v:false,
+      \   'keymap': 'ctrl-r',
+      \   'required': ['branch'],
+      \   'confirm': v:false,
+      \ },
+      \ 'track': {
+      \   'prompt': 'Track> ',
+      \   'execute': 'echo system("{git} checkout --track {branch}")',
+      \   'multiple': v:false,
+      \   'keymap': 'ctrl-t',
+      \   'required': ['branch'],
+      \   'confirm': v:false,
+      \ },
+      \}
+
 map <C-f> <Esc><Esc>:Files!<CR>
 inoremap <C-f> <Esc><Esc>:BLines!<CR>
 map <C-g> <Esc><Esc>:BCommits!<CR>
@@ -139,6 +169,11 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+
+nnoremap c<C-h> :lefta vsp new<CR>
+nnoremap c<C-j> :bel sp new<CR>
+nnoremap c<C-k> :abo sp new<CR>
+nnoremap c<C-l> :rightb vsp new<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Easymotion
@@ -230,7 +265,7 @@ nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
 " => Makefile
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <F5> :w <CR> :!make && ./a.out <CR>
+nnoremap <F5> :w <CR> :!make && ./runner <CR>
 
 let g:clang_complete_macros = 1
 let g:clang_user_options = ' -DCLANG_COMPLETE_ONLY'
