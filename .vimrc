@@ -182,6 +182,12 @@ map <leader>/ <Plug>(easymotion-bd-w)
 nmap <leader>/ <Plug>(easymotion-overwin-w)
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Startify
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:startify_change_to_dir=0
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Coc Completion
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<Tab>"
