@@ -3,6 +3,9 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.dotfiles/zsh/ohmyzsh"
+export EDITOR="vim"
+export TERMINAL="terminal"
+export BROWSER="firefox"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -122,9 +125,13 @@ alias tls='tmux ls'
 alias tat='tmux attach -t'
 alias tns='tmux new-session -s'
 
+# LF
+
+
 # FZF configuration
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_OPS="--extended"
+alias f='fzf'
 
 # ZshMarks Bookmarks Alias
 alias g="jump"

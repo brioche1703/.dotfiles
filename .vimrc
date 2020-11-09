@@ -8,11 +8,12 @@ filetype off                  " required
 " GENERAL "
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-fugitive'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'mhinz/vim-startify' 				"open last used buffer
 Plug 'vim-airline/vim-airline'			" Airline status bar
 Plug 'vim-airline/vim-airline-themes'
+Plug 'voldikss/vim-floaterm'
 
 " NerdTree "
 Plug 'preservim/nerdtree'
@@ -38,6 +39,10 @@ Plug 'dense-analysis/ale'
 
 " Snippets "
 Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+
+" Debugger"
+Plug 'puremourning/vimspector'
 
 call plug#end()
 
@@ -45,6 +50,7 @@ call plug#end()
 " => General settings 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 set nocompatible
+set cursorline
 set hidden
 set cmdheight=2
 set cmdheight=2
@@ -63,6 +69,10 @@ set ignorecase
 set hlsearch
 set colorcolumn=81
 set textwidth=80
+set mouse=a
+set noshowmode
+set clipboard^=unnamed
+set fillchars=vert:\ ,stl:\ ,stlnc:\
 highlight ColorColumn ctermbg=235 guibg=#2c2d27
 
 filetype plugin on
@@ -79,7 +89,7 @@ map <leader><leader> <Esc>/<++><CR>"_c4l
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Theme 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
-colorscheme dracula
+colorscheme koehler
 set termguicolors
 " Make vim background transparent
 " hi Normal guibg=NONE ctermbg=NONE
@@ -99,9 +109,8 @@ map <C-c> gcc
 " Replace word without deleting buffer
 map <C-p> cw<C-r>0<ESC>
 
-" Make TAB go to the matching pair
-nnoremap <Tab> %
-
+" Open .vimrc file
+nmap <leader>ov :e ~/.vimrc<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 " =>  Files , backups, and undo
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -116,7 +125,6 @@ set laststatus=2 "show status line all the time
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 " => FZF 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
 let $FZF_DEFAULT_OPTS='--reverse'
 
 let g:fzf_branch_actions = {
@@ -146,6 +154,10 @@ map <C-g> <Esc><Esc>:BCommits!<CR>
 " => Vim-Airline 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 " => NerdTree 
@@ -174,6 +186,9 @@ nnoremap c<C-j> :bel sp new<CR>
 nnoremap c<C-k> :abo sp new<CR>
 nnoremap c<C-l> :rightb vsp new<CR>
 
+map <Leader><Tab> :bn<cr>
+map <Leader><S-Tab> :bp<cr>
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Easymotion
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -190,6 +205,15 @@ let g:startify_change_to_dir=0
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Coc Completion
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
+set hidden
+
+set nobackup
+set nowritebackup
+
+set cmdheight=2
+set updatetime=300
+set shortmess+=c
+
 inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
@@ -200,22 +224,14 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1] =~ '\s'
 endfunction
 
-inoremap <silent><expr> <Tab>
-  \ pumvisible() ? "\<C-n>" :
-  \ <SID>check_back_space() ? "\<Tab>" :
-  \ coc#refresh()
-inoremap <silent><expr> <S-Tab>
-  \ pumvisible() ? "\<C-p>" :
-  \ <SID>check_back_space() ? "\<S-Tab>" :
-  \ coc#refresh()
+" Snippets go next, prev
+let g:coc_snippet_next = '<C-l>' 
+let g:coc_snippet_prev = '<M-l>' 
 
 " Press Enter to select completion items or expand snippets
 inoremap <silent><expr> <CR>
   \ pumvisible() ? "\<C-y>" :
   \ "\<C-g>u\<CR>"
-
-let g:coc_snippet_next = '<Tab>'              " Use Tab to jump to next snippet placeholder
-let g:coc_snippet_prev = '<S-Tab>'            " Use Shift+Tab to jump to previous snippet placeholder
 
 " Use <c-space> to trigger completion.
 if has('nvim')
@@ -264,13 +280,23 @@ nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
 " nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 " nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+" tnoremap <silent><nowait> <space>t  :<C-u>CocCommand terminal.hidden<CR>
 
+" nnoremap   <silent>   <leader><leader>t    :FloatermNew<CR>
+tnoremap   <silent>   <C-t>    <C-\><C-n>:FloatermNew<CR>
+tnoremap   <silent>   <C-h>    <C-\><C-n>:FloatermPrev<CR>
+tnoremap   <silent>   <C-l>    <C-\><C-n>:FloatermNext<CR>
+nnoremap   <silent>   <C-t>   :FloatermToggle<CR>
+tnoremap   <silent>   <C-t>   <C-\><C-n>:FloatermToggle<CR>
+
+" Add status line support, for integration with other plugin, checkout `:h coc-status`
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Makefile
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <F5> :w <CR> :!make && ./runner <CR>
+nnoremap <leader><F5> :w <CR> :!make && ./runner <CR>
 
 let g:clang_complete_macros = 1
 let g:clang_user_options = ' -DCLANG_COMPLETE_ONLY'
@@ -299,7 +325,34 @@ let g:ale_linters = {
 
 let g:OmniSharp_selector_ui = 'coc'
 
-" UltiSnips """"""""
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Debugger (vimspector)
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <leader>dd :call vimspector#Launch()<CR>
+nmap <leader>dx :VimspectorReset<CR>
+nmap <leader>de :VimspectorEval
+nmap <leader>dw :VimspectorWatch
+nmap <leader>do :VimspectorShowOutput
+
+let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
+" Binds
+" F5                start/continue debugging
+" Shift F5          stop debugging
+" Ctrl+Shift F5     restart debugging
+" F6                Pause
+" F9                Toggle breakpoint on current line
+" Shift F9          Add a function breakpoint for the expression under the cursor
+" F10               Step over
+" F11               Step into
+" Shift F11         Step out of the current scope
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => SilverSearcher (search in multiple files)
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:ackprg = 'ag --nogroup --nocolor --column'
+
+map <M-f> <Esc><Esc>:ag .<CR>
