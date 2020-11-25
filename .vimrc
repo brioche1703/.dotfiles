@@ -33,6 +33,9 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'dracula/vim',{'as':'dracula'}
 Plug 'octol/vim-cpp-enhanced-highlight'
 
+" Lint / Syntax "
+Plug 'vim-syntastic/syntastic'
+
 " Unity "
 Plug 'OmniSharp/omnisharp-vim'
 Plug 'dense-analysis/ale'
@@ -292,6 +295,11 @@ tnoremap   <silent>   <C-t>   <C-\><C-n>:FloatermToggle<CR>
 " Add status line support, for integration with other plugin, checkout `:h coc-status`
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
+" c++ syntax highlighting
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Makefile
 
@@ -328,7 +336,6 @@ let g:OmniSharp_selector_ui = 'coc'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Debugger (vimspector)
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <leader>dd :call vimspector#Launch()<CR>
 nmap <leader>dx :VimspectorReset<CR>
@@ -351,8 +358,18 @@ let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 " => SilverSearcher (search in multiple files)
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:ackprg = 'ag --nogroup --nocolor --column'
 
 map <M-f> <Esc><Esc>:ag .<CR>
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Syntastic (lint)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:syntastic_cpp_checkers = ['cpplint']
+let g:syntastic_c_checkers = ['cpplint']
+let g:syntastic_cpp_cpplint_exec = 'cpplint'
+" The following two lines are optional. Configure it to your liking!
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
